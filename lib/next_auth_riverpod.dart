@@ -14,26 +14,20 @@ class NextAuthState<T> {
   final T? session;
   final SessionStatus status;
 
-  const NextAuthState({
-    this.session,
-    required this.status,
-  });
+  const NextAuthState({this.session, required this.status});
 
-  NextAuthState<T> copyWith({
-    Opt<T>? session,
-    Opt<SessionStatus>? status,
-  }) {
+  NextAuthState<T> copyWith({Opt<T>? session, Opt<SessionStatus>? status}) {
     return NextAuthState<T>(
       session: session == null ? this.session : session.value,
-      status: status == null ? this.status : status.value!
+      status: status == null ? this.status : status.value!,
     );
   }
 }
 
 /// Notifier that manages NextAuthClient state, refetch timer, and app lifecycle
 /// This is a pure synchronous Notifier that only listens to event stream
-class NextAuthRiverpodNotifier<T>
-    extends Notifier<NextAuthState<T>> with WidgetsBindingObserver {
+class NextAuthRiverpodNotifier<T> extends Notifier<NextAuthState<T>>
+    with WidgetsBindingObserver {
   NextAuthClient<T>? _client;
   Timer? _refetchTimer;
   bool _isAppInForeground = true;
@@ -82,10 +76,7 @@ class NextAuthRiverpodNotifier<T>
     }
 
     // return the latest state from client
-    return NextAuthState<T>(
-      session: client.session,
-      status: client.status,
-    );
+    return NextAuthState<T>(session: client.session, status: client.status);
   }
 
   void _handleStatusChanged(SessionStatus status) {
@@ -118,8 +109,7 @@ class NextAuthRiverpodNotifier<T>
     if (_client == null || !_isAppInForeground) return;
     try {
       await _client!.refetchSession();
-    } catch (_) {
-    }
+    } catch (_) {}
   }
 
   @override
@@ -156,7 +146,9 @@ class NextAuthRiverpodNotifier<T>
   }
 }
 
-final _nextAuthClientProvider = Provider<NextAuthClient<Object>?>((ref) => null);
+final _nextAuthClientProvider = Provider<NextAuthClient<Object>?>(
+  (ref) => null,
+);
 final _refetchIntervalProvider = Provider<int?>((ref) => null);
 final _refetchOnWindowFocusProvider = Provider<bool>((ref) => true);
 
@@ -171,14 +163,14 @@ final _nextAuthInitProvider = FutureProvider<void>((ref) async {
 
 /// Scope widget for NextAuth Riverpod
 /// Wrap your app with this widget to provide NextAuthClient and configuration
-/// 
+///
 /// This widget will wait for the client to be initialized before rendering its child,
 /// ensuring that session and status are available when any page first watches them.
-/// 
+///
 /// Example:
 /// ```dart
 /// final client = NextAuthClient(config);
-/// 
+///
 /// NextAuthRiverpodScope(
 ///   client: client,
 ///   refetchInterval: 30000,
@@ -188,6 +180,7 @@ final _nextAuthInitProvider = FutureProvider<void>((ref) async {
 /// ```
 class NextAuthRiverpodScope<T> extends StatelessWidget {
   final NextAuthClient<T> client;
+
   /// in milliseconds
   final int? refetchInterval;
   final bool refetchOnWindowFocus;
@@ -198,20 +191,20 @@ class NextAuthRiverpodScope<T> extends StatelessWidget {
     required this.client,
     this.refetchInterval,
     this.refetchOnWindowFocus = true,
-    required this.child
+    required this.child,
   });
 
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
       overrides: [
-        _nextAuthClientProvider.overrideWithValue(client as NextAuthClient<Object>?),
+        _nextAuthClientProvider.overrideWithValue(
+          client as NextAuthClient<Object>?,
+        ),
         _refetchIntervalProvider.overrideWithValue(refetchInterval),
         _refetchOnWindowFocusProvider.overrideWithValue(refetchOnWindowFocus),
       ],
-      child: _InitializationGuard(
-        child: child,
-      ),
+      child: _InitializationGuard(child: child),
     );
   }
 }
@@ -225,7 +218,8 @@ class _InitializationGuard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    /* final initAsync = */ref.watch(_nextAuthInitProvider);
+    /* final initAsync = */
+    ref.watch(_nextAuthInitProvider);
 
     // return initAsync.when(
     //   data: (a) {
@@ -237,7 +231,7 @@ class _InitializationGuard extends ConsumerWidget {
     // );
 
     // Directly return child without waiting for _nextAuthInitProvider to finish initializing,
-    // because the child widget needs to determine which UI to display based 
+    // because the child widget needs to determine which UI to display based
     // on SessionStatus and SessionStatus will be updated when _nextAuthInitProvider is finished initializing.
     return child;
   }
@@ -245,9 +239,12 @@ class _InitializationGuard extends ConsumerWidget {
 
 /// Main provider for state management
 /// Usage: ref.watch(authProvider)
-final authProvider = NotifierProvider<NextAuthRiverpodNotifier<Object>, NextAuthState<Object>>(() {
-  return NextAuthRiverpodNotifier<Object>();
-});
+final authProvider =
+    NotifierProvider<NextAuthRiverpodNotifier<Object>, NextAuthState<Object>>(
+      () {
+        return NextAuthRiverpodNotifier<Object>();
+      },
+    );
 
 /// Provider that returns only the session
 /// Usage: ref.watch(sessionProvider)
@@ -263,7 +260,9 @@ final statusProvider = Provider<SessionStatus>((ref) {
 
 /// Stream provider for next auth events
 /// Usage: ref.listen(authEventStreamProvider)
-final authEventStreamProvider = StreamProvider.autoDispose<NextAuthEvent?>((ref) {
+final authEventStreamProvider = StreamProvider.autoDispose<NextAuthEvent?>((
+  ref,
+) {
   final client = ref.watch(_nextAuthClientProvider);
   if (client == null) return const Stream.empty();
   return client.eventBus.on<NextAuthEvent>();

@@ -55,12 +55,15 @@ void main() {
   // next_auth_riverpod Integration
   // ============================================================================
   // Use NextAuthRiverpodScope to wrap your app for automatic session management
-  runApp(NextAuthRiverpodScope<SessionData>(
-    client: getIt<NextAuthClient<SessionData>>(),
-    // refetchInterval: 30000, // optional: refetch session every 30 seconds
-    refetchOnWindowFocus: true, // optional: refetch when app comes to foreground
-    child: const MyApp(),
-  ));
+  runApp(
+    NextAuthRiverpodScope<SessionData>(
+      client: getIt<NextAuthClient<SessionData>>(),
+      // refetchInterval: 30000, // optional: refetch session every 30 seconds
+      refetchOnWindowFocus:
+          true, // optional: refetch when app comes to foreground
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends ConsumerWidget {
@@ -76,7 +79,7 @@ class MyApp extends ConsumerWidget {
     // - statusProvider: SessionStatus - current session status (initial, loading, authenticated, unauthenticated)
     // - sessionProvider: T? - current session data (null if not authenticated)
     // - authEventStreamProvider: Stream<NextAuthEvent> - stream of authentication events
-    
+
     final sessionStatus = ref.watch(statusProvider);
     final session = ref.watch(sessionProvider) as SessionData?;
     ref.listen(authEventStreamProvider, (previous, next) {
@@ -84,11 +87,19 @@ class MyApp extends ConsumerWidget {
         if (event == null) return;
         if (event is SignedInEvent) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Signed in, jwt token: ${event.accessToken.toJson()}, you may save this for your backend API calls')),
+            SnackBar(
+              content: Text(
+                'Signed in, jwt token: ${event.accessToken.toJson()}, you may save this for your backend API calls',
+              ),
+            ),
           );
         } else if (event is SignedOutEvent) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Signed out, you may now clear the jwt token you saved before')),
+            const SnackBar(
+              content: Text(
+                'Signed out, you may now clear the jwt token you saved before',
+              ),
+            ),
           );
         }
       });
@@ -98,9 +109,7 @@ class MyApp extends ConsumerWidget {
       title: 'NextAuth Riverpod Example',
       home: Builder(
         builder: (context) => Scaffold(
-          appBar: AppBar(
-            title: const Text('NextAuth Riverpod Example'),
-          ),
+          appBar: AppBar(title: const Text('NextAuth Riverpod Example')),
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -131,7 +140,9 @@ class MyApp extends ConsumerWidget {
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Sign in failed: ${response.error}')),
+                        SnackBar(
+                          content: Text('Sign in failed: ${response.error}'),
+                        ),
                       );
                     }
                   },
@@ -152,11 +163,17 @@ class MyApp extends ConsumerWidget {
                     );
                     if (response.ok) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Google sign in successful')),
+                        const SnackBar(
+                          content: Text('Google sign in successful'),
+                        ),
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Google sign in failed: ${response.error}')),
+                        SnackBar(
+                          content: Text(
+                            'Google sign in failed: ${response.error}',
+                          ),
+                        ),
                       );
                     }
                   },
@@ -168,9 +185,9 @@ class MyApp extends ConsumerWidget {
                     // Example: Sign out using getIt
                     final nextAuthClient = getIt<NextAuthClient<SessionData>>();
                     await nextAuthClient.signOut();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Signed out')),
-                    );
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(const SnackBar(content: Text('Signed out')));
                   },
                   child: const Text('Sign Out'),
                 ),

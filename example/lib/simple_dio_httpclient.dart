@@ -37,16 +37,20 @@ class SimpleDioHttpClient implements HttpClient {
 
       final oldRaw = opts.headers?['cookie'] ?? opts.headers?['Cookie'];
       final oldMap = oldRaw != null && oldRaw.isNotEmpty
-          ? Map.fromEntries(oldRaw.split(';').map((s) {
-              final kv = s.trim().split('=');
-              return MapEntry(kv[0], kv.sublist(1).join('='));
-            }))
+          ? Map.fromEntries(
+              oldRaw.split(';').map((s) {
+                final kv = s.trim().split('=');
+                return MapEntry(kv[0], kv.sublist(1).join('='));
+              }),
+            )
           : <String, String>{};
 
       oldMap.addAll(options.cookies!); // overwrite
       if (oldMap.isEmpty) return opts;
 
-      final merged = oldMap.entries.map((e) => '${e.key}=${e.value}').join('; ');
+      final merged = oldMap.entries
+          .map((e) => '${e.key}=${e.value}')
+          .join('; ');
       opts.headers = {...(opts.headers ?? {}), 'cookie': merged};
 
       return opts;

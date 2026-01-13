@@ -1,4 +1,3 @@
-
 import 'package:flutter_next_auth_core/core/utils/session_serializer.dart';
 
 class SessionUser {
@@ -7,7 +6,12 @@ class SessionUser {
   final String email;
   final String? image;
 
-  SessionUser({required this.id, required this.nickname, required this.email, required this.image});
+  SessionUser({
+    required this.id,
+    required this.nickname,
+    required this.email,
+    required this.image,
+  });
 }
 
 class SessionData {
@@ -17,7 +21,13 @@ class SessionData {
   final String loginType;
   final String visitMode;
 
-  SessionData({required this.user, required this.roles, this.emailVerified, required this.loginType, required this.visitMode});
+  SessionData({
+    required this.user,
+    required this.roles,
+    this.emailVerified,
+    required this.loginType,
+    required this.visitMode,
+  });
 }
 
 // Or for simplicity, you can just use Map<String, dynamc> as the SessionData type, so the conversion will be just an 'as Map<String, dynamic>'
@@ -39,7 +49,7 @@ class SessionDataSerializer implements SessionSerializer<SessionData> {
     }
     return null;
   }
-  
+
   @override
   Map<String, dynamic> toJson(SessionData data) {
     return {

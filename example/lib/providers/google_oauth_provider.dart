@@ -9,12 +9,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 class GoogleOAuthProvider implements OAuthProvider {
   @override
   final String providerName = "google";
-  
+
   @override
   List<String> get scopes => [
     'openid',
     'https://www.googleapis.com/auth/userinfo.profile',
-    'https://www.googleapis.com/auth/userinfo.email'
+    'https://www.googleapis.com/auth/userinfo.email',
   ];
 
   bool _isInitialized = false;
@@ -30,8 +30,10 @@ class GoogleOAuthProvider implements OAuthProvider {
     final signIn = GoogleSignIn.instance;
 
     await signIn.initialize(
-      clientId: 'YOUR_GOOGLE_CLIENT_ID', // replace with your Google OAuth client ID
-      serverClientId: 'YOUR_GOOGLE_SERVER_CLIENT_ID', // replace with your Google OAuth server client ID
+      clientId:
+          'YOUR_GOOGLE_CLIENT_ID', // replace with your Google OAuth client ID
+      serverClientId:
+          'YOUR_GOOGLE_SERVER_CLIENT_ID', // replace with your Google OAuth server client ID
     );
 
     _isInitialized = true;
@@ -51,12 +53,21 @@ class GoogleOAuthProvider implements OAuthProvider {
 
     if (_currentUser == null || _isJwtExpiredOrNearExpiry(idToken)) {
       _currentUser = await signIn.authenticate();
-      authorizationCode = (await _currentUser!.authorizationClient.authorizeServer(scopes))?.serverAuthCode;
+      authorizationCode =
+          (await _currentUser!.authorizationClient.authorizeServer(
+            scopes,
+          ))?.serverAuthCode;
       idToken = _currentUser!.authentication.idToken;
     }
 
-    assert(_currentUser != null, 'Google sign-in failed: authenticate method returned null');
-    assert(idToken != null && idToken.isNotEmpty, 'Google sign-in failed: idToken is null or empty');
+    assert(
+      _currentUser != null,
+      'Google sign-in failed: authenticate method returned null',
+    );
+    assert(
+      idToken != null && idToken.isNotEmpty,
+      'Google sign-in failed: idToken is null or empty',
+    );
 
     final data = OAuthAuthorizationData(
       authorizationCode: authorizationCode,
