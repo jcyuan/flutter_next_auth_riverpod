@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_next_auth/next_auth.dart';
+import 'package:flutter_next_auth_core/next_auth.dart';
 
 class Opt<T> {
   final T? value;
@@ -10,7 +10,7 @@ class Opt<T> {
   static const Opt absent = Opt(null);
 }
 
-class NextAuthState<T extends Map<String, dynamic>> {
+class NextAuthState<T> {
   final T? session;
   final SessionStatus status;
 
@@ -32,7 +32,7 @@ class NextAuthState<T extends Map<String, dynamic>> {
 
 /// Notifier that manages NextAuthClient state, refetch timer, and app lifecycle
 /// This is a pure synchronous Notifier that only listens to event stream
-class NextAuthRiverpodNotifier<T extends Map<String, dynamic>>
+class NextAuthRiverpodNotifier<T>
     extends Notifier<NextAuthState<T>> with WidgetsBindingObserver {
   NextAuthClient<T>? _client;
   Timer? _refetchTimer;
@@ -57,7 +57,7 @@ class NextAuthRiverpodNotifier<T extends Map<String, dynamic>>
 
     _storedRefetchInterval = ref.watch(_refetchIntervalProvider);
     _storedRefetchOnWindowFocus = ref.watch(_refetchOnWindowFocusProvider);
-    ref.listen(nextAuthEventStreamProvider, (prev, next) {
+    ref.listen(authEventStreamProvider, (prev, next) {
       next.whenData((event) {
         if (event == null) return;
         if (event is SessionChangedEvent) {
@@ -156,7 +156,7 @@ class NextAuthRiverpodNotifier<T extends Map<String, dynamic>>
   }
 }
 
-final _nextAuthClientProvider = Provider<NextAuthClient<Map<String, dynamic>>?>((ref) => null);
+final _nextAuthClientProvider = Provider<NextAuthClient<Object>?>((ref) => null);
 final _refetchIntervalProvider = Provider<int?>((ref) => null);
 final _refetchOnWindowFocusProvider = Provider<bool>((ref) => true);
 
@@ -186,8 +186,8 @@ final _nextAuthInitProvider = FutureProvider<void>((ref) async {
 ///   child: MyApp(),
 /// )
 /// ```
-class NextAuthRiverpodScope extends StatelessWidget {
-  final NextAuthClient<Map<String, dynamic>> client;
+class NextAuthRiverpodScope<T> extends StatelessWidget {
+  final NextAuthClient<T> client;
   /// in milliseconds
   final int? refetchInterval;
   final bool refetchOnWindowFocus;
@@ -205,7 +205,7 @@ class NextAuthRiverpodScope extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       overrides: [
-        _nextAuthClientProvider.overrideWithValue(client),
+        _nextAuthClientProvider.overrideWithValue(client as NextAuthClient<Object>?),
         _refetchIntervalProvider.overrideWithValue(refetchInterval),
         _refetchOnWindowFocusProvider.overrideWithValue(refetchOnWindowFocus),
       ],
@@ -244,26 +244,26 @@ class _InitializationGuard extends ConsumerWidget {
 }
 
 /// Main provider for state management
-/// Usage: ref.watch(nextAuthProvider)
-final nextAuthProvider = NotifierProvider<NextAuthRiverpodNotifier<Map<String, dynamic>>, NextAuthState<Map<String, dynamic>>>(() {
-  return NextAuthRiverpodNotifier<Map<String, dynamic>>();
+/// Usage: ref.watch(authProvider)
+final authProvider = NotifierProvider<NextAuthRiverpodNotifier<Object>, NextAuthState<Object>>(() {
+  return NextAuthRiverpodNotifier<Object>();
 });
 
 /// Provider that returns only the session
 /// Usage: ref.watch(sessionProvider)
-final sessionProvider = Provider<Map<String, dynamic>?>((ref) {
-  return ref.watch(nextAuthProvider).session;
+final sessionProvider = Provider<Object?>((ref) {
+  return ref.watch(authProvider).session;
 });
 
 /// Provider that returns only the status
 /// Usage: ref.watch(statusProvider)
 final statusProvider = Provider<SessionStatus>((ref) {
-  return ref.watch(nextAuthProvider).status;
+  return ref.watch(authProvider).status;
 });
 
 /// Stream provider for next auth events
-/// Usage: ref.listen(nextAuthEventStreamProvider)
-final nextAuthEventStreamProvider = StreamProvider.autoDispose<NextAuthEvent?>((ref) {
+/// Usage: ref.listen(authEventStreamProvider)
+final authEventStreamProvider = StreamProvider.autoDispose<NextAuthEvent?>((ref) {
   final client = ref.watch(_nextAuthClientProvider);
   if (client == null) return const Stream.empty();
   return client.eventBus.on<NextAuthEvent>();
