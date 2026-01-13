@@ -138,10 +138,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_next_auth_core
-      sha256: "6a9b4493a7e714a5c42e661b166fb8754ac50668f9146c651cb3f3c59bd000e9"
+      sha256: ad0c11eb1156a2ab780619a83faf3c4233c6f7ff0ec780791ad88a00faaa2582
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.5"
   flutter_riverpod:
     dependency: "direct main"
     description:
