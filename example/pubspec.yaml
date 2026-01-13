@@ -1,0 +1,28 @@
+name: next_auth_client_example
+description: A minimal example demonstrating NextAuthClient initialization
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  dio: ^5.1.1
+  google_sign_in: ^7.2.0
+  get_it: ^9.2.0
+
+  flutter_next_auth_core:
+    path: ../../flutter_next_auth_core
+  flutter_next_auth_riverpod:
+    path: ../../flutter_next_auth_riverpod
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
