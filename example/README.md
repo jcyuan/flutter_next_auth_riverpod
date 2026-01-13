@@ -37,9 +37,9 @@ Note: `dio` and `get_it` is not a dependency of the `flutter_next_auth_riverpod`
 
 ### 2. NextAuthClient Configuration
 
-For complete NextAuthClient API reference (Properties, Methods, Event Handling) and and example, please refer to:
+For complete NextAuthClient API reference (Properties, Methods, Event Handling) and examples, please refer to:
 
-**https://github.com/jcyuan/flutter_next_auth_core?tab=readme-ov-file#-nextauthclient-api-reference**
+[NextAuthClient API reference](https://github.com/jcyuan/flutter_next_auth_core?tab=readme-ov-file#-nextauthclient-api-reference)
 
 ## flutter_next_auth_riverpod Integration
 
@@ -51,7 +51,7 @@ For complete NextAuthClient API reference (Properties, Methods, Event Handling) 
 
 - **client**: `NextAuthClient<T>` (required) - The NextAuthClient instance
 - **refetchInterval**: `int?` (optional) - Interval in milliseconds to automatically refetch session from server
-- **refetchOnWindowFocus**: `bool` (optional) - Whether to refetch session when app comes to foreground (default: `false`)
+- **refetchOnWindowFocus**: `bool` (optional) - Whether to refetch session when app comes to foreground (default: `true`)
 - **child**: `Widget` (required) - Your app widget
 
 #### Minimal Example
@@ -86,7 +86,7 @@ Provides the current session status.
 
 Provides the current session data.
 
-- **Type**: `Provider<T?>`
+- **Type**: `Provider<Object?>` (cast to your session model as needed)
 - **Returns**: Session data if authenticated, `null` otherwise
 
 #### Minimal Example
@@ -99,7 +99,7 @@ class MyWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sessionStatus = ref.watch(statusProvider);
-    final session = ref.watch(sessionProvider);
+    final session = ref.watch(sessionProvider); // Object?
     
     return Text('Status: ${sessionStatus.name}, Session: ${session?.toString()}');
   }
@@ -122,7 +122,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Watch session status and session data
     final sessionStatus = ref.watch(statusProvider);
-    final session = ref.watch(sessionProvider);
+    final session = ref.watch(sessionProvider); // Object?
 
     return MaterialApp(
       home: Scaffold(
@@ -186,7 +186,7 @@ When implementing your own OAuth provider:
      - Only when the idToken expires or the client OAuth package's silent login fails, will it force login to refresh the idToken
    - `authorizationCode`: The authorization code (optional, for server-side token exchange)
 3. See `lib/providers/google_oauth_provider.dart` for a complete example
-4. Reference `/lib/oauth_api/rout.ts` for backend verification logic
+4. Reference `lib/oauth_api/route.ts` for backend verification logic
 
 ## See Also
 

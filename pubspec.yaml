@@ -1,6 +1,6 @@
 name: flutter_next_auth_riverpod
 description: Riverpod integration for NextAuth authentication in Flutter, providing reactive state management for session and authentication status.
-version: 1.0.0
+version: 1.0.1
 repository: https://github.com/jcyuan/flutter_next_auth_riverpod
 issue_tracker: https://github.com/jcyuan/flutter_next_auth_riverpod/issues
 homepage: https://github.com/jcyuan/flutter_next_auth_riverpod#readme
