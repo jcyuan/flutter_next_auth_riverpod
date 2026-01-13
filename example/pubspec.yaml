@@ -1,5 +1,5 @@
 name: next_auth_client_example
-description: A minimal example demonstrating NextAuthClient initialization
+description: A minimal example demonstrating next_auth_riverpod integration
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -15,10 +15,9 @@ dependencies:
   google_sign_in: ^7.2.0
   get_it: ^9.2.0
 
-  flutter_next_auth_core:
-    path: ../../flutter_next_auth_core
+  flutter_next_auth_core: ^1.0.2
   flutter_next_auth_riverpod:
-    path: ../../flutter_next_auth_riverpod
+    path: ../
 
 dev_dependencies:
   flutter_test:
