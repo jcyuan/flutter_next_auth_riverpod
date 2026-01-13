@@ -1,5 +1,5 @@
 name: flutter_next_auth_riverpod
-version: 0.0.1
+version: 1.0.0
 publish_to: none
 environment:
   sdk: ">=3.10.4 <4.0.0"
@@ -7,7 +7,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_next_auth:
-    path: ../flutter_next_auth
-
+  flutter_next_auth_core: ^1.0.2
+  
   flutter_riverpod: ^3.1.0
