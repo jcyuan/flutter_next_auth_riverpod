@@ -9,6 +9,10 @@ Riverpod integration for [NextAuth.js](https://next-auth.js.org/) in Flutter via
 - **Auto refetch**: optional periodic refetch and refetch when app returns to foreground.
 - **Auth event stream**: listen to auth lifecycle events (sign in/out, session/status changes).
 
+Example Video:
+
+https://github.com/user-attachments/assets/57496047-716b-4419-b4b2-c6c240572edd
+
 ## Installation
 
 Add dependencies to your `pubspec.yaml`:
