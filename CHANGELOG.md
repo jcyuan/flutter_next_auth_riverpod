@@ -13,3 +13,7 @@
 ## 1.0.3 - 2026-1-14
 
 - Upgrade core dependency, because a key bug was fixed in the core lib
+
+## 1.0.4 - 2026-1-14
+
+- Added in-progress status for example
