@@ -28,8 +28,8 @@ dependencies:
   dio: ^5.1.1
   google_sign_in: ^7.2.0
   get_it: ^9.2.0
-  flutter_next_auth_core: ^1.0.2
-  flutter_next_auth_riverpod: ^1.0.0
+  flutter_next_auth_core: ^1.0.5
+  flutter_next_auth_riverpod: ^1.0.5
   flutter_riverpod: ^3.1.0
 ```
 
@@ -99,7 +99,7 @@ class MyWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sessionStatus = ref.watch(statusProvider);
-    final session = ref.watch(sessionProvider); // Object?
+    final session = ref.watch(sessionProvider); // as YourSessionType?
     
     return Text('Status: ${sessionStatus.name}, Session: ${session?.toString()}');
   }
@@ -122,7 +122,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Watch session status and session data
     final sessionStatus = ref.watch(statusProvider);
-    final session = ref.watch(sessionProvider); // Object?
+    final session = ref.watch(sessionProvider); // as YourSessionType?
 
     return MaterialApp(
       home: Scaffold(

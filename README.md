@@ -45,10 +45,10 @@ void main() {
     httpClient: /* your HttpClient */,
   );
 
-  final client = NextAuthClient<Object>(config);
+  final client = NextAuthClient<YourSessionType>(config);
 
   runApp(
-    NextAuthRiverpodScope<Object>(
+    NextAuthRiverpodScope<YourSessionType>(
       client: client,
       // in milliseconds
       refetchInterval: 30000,
@@ -91,7 +91,7 @@ class MyWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final status = ref.watch(statusProvider);
-    final session = ref.watch(sessionProvider); // Object?
+    final session = ref.watch(sessionProvider); // as YourSessionType?
 
     return Text('Status: ${status.name}, Session: ${session?.toString()}');
   }
