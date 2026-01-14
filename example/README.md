@@ -186,7 +186,7 @@ When implementing your own OAuth provider:
      - Only when the idToken expires or the client OAuth package's silent login fails, will it force login to refresh the idToken
    - `authorizationCode`: The authorization code (optional, for server-side token exchange)
 3. See `lib/providers/google_oauth_provider.dart` for a complete example
-4. Reference `lib/oauth_api/route.ts` for backend verification logic
+4. Reference [https://github.com/jcyuan/flutter_next_auth_core/tree/main/example/lib/oauth_api](https://github.com/jcyuan/flutter_next_auth_core/tree/main/example/lib/oauth_api) for backend verification logic
 
 ## See Also
 
