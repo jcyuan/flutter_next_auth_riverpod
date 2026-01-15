@@ -1,4 +1,4 @@
-import 'package:flutter_next_auth_core/core/utils/session_serializer.dart';
+import 'package:flutter_next_auth_core/next_auth.dart';
 
 class SessionUser {
   final String id;
@@ -34,20 +34,33 @@ class SessionData {
 class SessionDataSerializer implements SessionSerializer<SessionData> {
   @override
   SessionData? fromJson(dynamic json) {
-    if (json is Map<String, dynamic>) {
-      return SessionData(
-        user: SessionUser(
-          id: json['id']!,
-          nickname: json['nickname']!,
-          email: json['email']!,
-          image: json['image']!,
-        ),
-        roles: json['roles'] ?? [],
-        loginType: json['loginType'],
-        visitMode: json['visitMode'],
-      );
-    }
-    return null;
+    if (json is! Map<String, dynamic>) return null;
+
+    final userRaw = json['user'];
+    final userMap = userRaw is Map<String, dynamic> ? userRaw : json;
+
+    final rolesRaw = json['roles'];
+    final roles = rolesRaw is List
+        ? rolesRaw.whereType<String>().toList()
+        : <String>[];
+
+    final emailVerifiedRaw = json['emailVerified'];
+    final emailVerified = emailVerifiedRaw is String
+        ? DateTime.tryParse(emailVerifiedRaw)
+        : null;
+
+    return SessionData(
+      user: SessionUser(
+        id: (userMap['id'] ?? '').toString(),
+        nickname: (userMap['nickname'] ?? '').toString(),
+        email: (userMap['email'] ?? '').toString(),
+        image: userMap['image']?.toString(),
+      ),
+      roles: roles,
+      emailVerified: emailVerified,
+      loginType: (json['loginType'] ?? '').toString(),
+      visitMode: (json['visitMode'] ?? '').toString(),
+    );
   }
 
   @override

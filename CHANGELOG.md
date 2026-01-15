@@ -29,3 +29,11 @@
 ## 1.0.7
 
 - Link oAuth backend logic example to Core lib, not provider it here
+
+## 1.0.8
+
+- Added email login in example
+
+## 1.0.9
+
+- fix session serialization error in example; fixed wrong version of core used in example
