@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:next_auth_client_example/providers/google_oauth_provider.dart';
 import 'package:next_auth_client_example/session_data.dart';
 import 'package:next_auth_client_example/simple_dio_httpclient.dart';
+import 'package:next_auth_client_example/login_email.dart';
 
 final getIt = GetIt.instance;
 
@@ -184,6 +185,19 @@ class _MyAppState extends ConsumerState<MyApp> {
                         }
                       : null,
                   child: const Text('Sign In with Password'),
+                ),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: !_isInProgress
+                      ? () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const EmailLoginPage(),
+                            ),
+                          );
+                        }
+                      : null,
+                  child: const Text('Sign In with Email'),
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton(
