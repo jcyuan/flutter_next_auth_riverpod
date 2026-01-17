@@ -37,3 +37,7 @@
 ## 1.0.9
 
 - fix session serialization error in example; fixed wrong version of core used in example
+
+## 1.0.10
+
+- Update dependency version

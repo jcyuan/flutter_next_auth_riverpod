@@ -19,8 +19,8 @@ Add dependencies to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_next_auth_core: ^1.1.0
-  flutter_next_auth_riverpod: ^1.0.9
+  flutter_next_auth_core: ^1.1.1
+  flutter_next_auth_riverpod: ^1.0.10
   flutter_riverpod: ^3.1.0
 ```
 
